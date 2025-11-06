@@ -1,50 +1,31 @@
-const esbuild = require("esbuild");
-const customPlugin = require("./customPlugin");
-const svgr = require("esbuild-plugin-svgr")
-const stylexPlugin = require("@stylexjs/esbuild-plugin")
+import esbuild from "esbuild";
+import customPlugin from "./customPlugin.js";
+import svgr from "esbuild-plugin-svgr";
+import stylexPlugin from "@stylexjs/esbuild-plugin";
 
-if (require.main === module) {
-  build(process.argv.slice(2));
-}
-
-async function build(args) {
-  await Promise.all([
-    buildJs()
-      .then(() => {
-        console.log("✅ Build JS complete");
-      })
-      .catch((err) => {
-        console.log(err)
-        console.error("💣 Error building JS");
-        if (args.includes("--debug")) {
-          console.log("----------------------------------------------------");
-          console.error(err);
-        }
-      }),
-  ]);
-
-  console.log("🎉 Build complete");
-}
-
-async function buildJs() {
-  esbuild.build({
+try {
+  await esbuild.build({
     entryPoints: ["src/index.tsx"],
     bundle: true,
     outdir: "public/dist",
     splitting: true,
     format: "esm",
     plugins: [
-      stylexPlugin.default({
+      stylexPlugin({
         dev: false,
-        generatedCSSFileName: 'public/dist/out.css',
+        useCSSLayers: true,
+        stylexImports: ["@stylexjs/stylex"],
+        generatedCSSFileName: "public/dist/out.css",
       }),
       customPlugin({ dev: false }),
       svgr(),
     ],
     loader: {
-      ".png": "file"
-    }
+      ".png": "file",
+    },
   });
+  console.log("✅ Build JS complete");
+} catch (err) {
+  console.log(err);
+  console.error("💣 Error building JS");
 }
-
-module.exports = build;

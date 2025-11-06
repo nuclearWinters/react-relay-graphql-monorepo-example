@@ -1,5 +1,13 @@
 import * as stylex from "@stylexjs/stylex";
-import { type FC, Fragment, useMemo, useState } from "react";
+import {
+  Dispatch,
+  type FC,
+  Fragment,
+  ReactElement,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 import {
   ConnectionHandler,
   type PreloadedQuery,
@@ -142,7 +150,10 @@ const baseLoanRowContainer = stylex.create({
 });
 
 interface Props {
-  fintechQuery: PreloadedQuery<AddInvestmentsQueriesQuery, Record<string, unknown>>;
+  fintechQuery: PreloadedQuery<
+    AddInvestmentsQueriesQuery,
+    Record<string, unknown>
+  >;
 }
 
 interface ILends {
@@ -155,14 +166,16 @@ interface ILends {
 }
 
 const Cell: FC<{ id: string }> = ({ id }) => {
-  const configLoansUpdate = useMemo<GraphQLSubscriptionConfig<AddInvestmentsQueriesUpdateSubscription>>(
+  const configLoansUpdate = useMemo<
+    GraphQLSubscriptionConfig<AddInvestmentsQueriesUpdateSubscription>
+  >(
     () => ({
       variables: {
         gid: id,
       },
       subscription: subscriptionAddInvestmentsUpdate,
     }),
-    [id],
+    [id]
   );
 
   useSubscription<AddInvestmentsQueriesUpdateSubscription>(configLoansUpdate);
@@ -179,11 +192,13 @@ const Cell: FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const RefetchCell: FC<{ loan: AddInvestmentsQueriesRowRefetch_loan$key }> = ({ loan }) => {
-  const [, refetch] = useRefetchableFragment<AddInvestmentQueriesRefetchQuery, AddInvestmentsQueriesRowRefetch_loan$key>(
-    addInvestmentsQueriesRowRefetchableFragment,
-    loan,
-  );
+const RefetchCell: FC<{ loan: AddInvestmentsQueriesRowRefetch_loan$key }> = ({
+  loan,
+}) => {
+  const [, refetch] = useRefetchableFragment<
+    AddInvestmentQueriesRefetchQuery,
+    AddInvestmentsQueriesRowRefetch_loan$key
+  >(addInvestmentsQueriesRowRefetchableFragment, loan);
   return (
     <td
       {...stylex.props(baseLoanRowClipboard.base)}
@@ -198,7 +213,7 @@ const RefetchCell: FC<{ loan: AddInvestmentsQueriesRowRefetch_loan$key }> = ({ l
 
 const columnAddInvestment: {
   id: string;
-  header: (t: (text: string) => string) => JSX.Element;
+  header: (t: (text: string) => string) => ReactElement;
   cell: (info: {
     info: {
       id: string;
@@ -212,10 +227,10 @@ const columnAddInvestment: {
       pendingCents: number;
     };
     value: string;
-    setLends: React.Dispatch<React.SetStateAction<ILends[]>>;
+    setLends: Dispatch<SetStateAction<ILends[]>>;
     t: (text: string) => string;
     loan: AddInvestmentsQueriesRowRefetch_loan$key;
-  }) => JSX.Element;
+  }) => ReactElement;
 }[] = [
   {
     id: "id",
@@ -248,12 +263,16 @@ const columnAddInvestment: {
   {
     id: "ROI",
     header: (t) => <TableColumnName>{t("Retorno anual")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.ROI}%</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.ROI}%</td>
+    ),
   },
   {
     id: "goal",
     header: (t) => <TableColumnName>{t("Monto")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.goal}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.goal}</td>
+    ),
   },
   {
     id: "term",
@@ -267,7 +286,9 @@ const columnAddInvestment: {
   {
     id: "pending",
     header: (t) => <TableColumnName>{t("Faltan")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.pending}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.pending}</td>
+    ),
   },
   {
     id: "expiry",
@@ -361,10 +382,10 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
       }
     }
   `);
-  const { data, loadNext, refetch } = usePaginationFragment<AddInvestmentsQueriesPaginationQuery, AddInvestmentsQueries_user$key>(
-    addInvestmentPaginationFragment,
-    user,
-  );
+  const { data, loadNext, refetch } = usePaginationFragment<
+    AddInvestmentsQueriesPaginationQuery,
+    AddInvestmentsQueries_user$key
+  >(addInvestmentPaginationFragment, user);
 
   const [lends, setLends] = useState<ILends[]>([]);
 
@@ -380,11 +401,17 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
     return acc + Number(item.quantity);
   }, 0);
 
-  const connectionLoanID = ConnectionHandler.getConnectionID(user?.id || "", "AddInvestmentsQueries_query_loansFinancing", {
-    reset,
-  });
+  const connectionLoanID = ConnectionHandler.getConnectionID(
+    user?.id || "",
+    "AddInvestmentsQueries_query_loansFinancing",
+    {
+      reset,
+    }
+  );
 
-  const configLoans = useMemo<GraphQLSubscriptionConfig<AddInvestmentsQueriesLoansSubscription>>(
+  const configLoans = useMemo<
+    GraphQLSubscriptionConfig<AddInvestmentsQueriesLoansSubscription>
+  >(
     () => ({
       variables: {
         reset,
@@ -392,7 +419,7 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
       },
       subscription: subscriptionLoans,
     }),
-    [connectionLoanID, reset],
+    [connectionLoanID, reset]
   );
 
   useSubscription<AddInvestmentsQueriesLoansSubscription>(configLoans);
@@ -420,7 +447,17 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
                 return null;
               }
               const value = getValue(node.id);
-              const { id, user_id, score, ROI, goal, term, expiry, pending, pendingCents } = node;
+              const {
+                id,
+                user_id,
+                score,
+                ROI,
+                goal,
+                term,
+                expiry,
+                pending,
+                pendingCents,
+              } = node;
               return (
                 <tr key={id} {...stylex.props(baseLoanRowContainer.base)}>
                   {columnAddInvestment.map((column) => (
@@ -484,7 +521,11 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
         </Rows>
         <Space styleX={customSpace.h20} />
         <Columns styleX={[baseColumn.base, baseColumn.columnJustifyCenter]}>
-          <CustomButton color="secondary" text={t("Cargar más")} onClick={() => loadNext(5)} />
+          <CustomButton
+            color="secondary"
+            text={t("Cargar más")}
+            onClick={() => loadNext(5)}
+          />
           <Space styleX={customSpace.w20} />
           <CustomButton
             text={t("Reiniciar lista")}
@@ -498,7 +539,7 @@ export const AddInvestmentsPage: FC<Props> = (props) => {
                   cursor: "",
                   reset: time,
                 },
-                { fetchPolicy: "network-only" },
+                { fetchPolicy: "network-only" }
               );
             }}
           />

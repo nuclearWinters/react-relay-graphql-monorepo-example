@@ -1,4 +1,4 @@
-import { type FC, Fragment, useMemo, useState } from "react";
+import { type FC, Fragment, ReactElement, useMemo, useState } from "react";
 
 import * as stylex from "@stylexjs/stylex";
 import {
@@ -40,7 +40,10 @@ import type { ApproveLoanQueries_user$key } from "./__generated__/ApproveLoanQue
 import type { ApproveLoansQueriesPaginationUser } from "./__generated__/ApproveLoansQueriesPaginationUser.graphql";
 
 interface Props {
-  fintechQuery: PreloadedQuery<ApproveLoanQueriesQuery, Record<string, unknown>>;
+  fintechQuery: PreloadedQuery<
+    ApproveLoanQueriesQuery,
+    Record<string, unknown>
+  >;
 }
 
 const baseLoanRowContainer = stylex.create({
@@ -119,14 +122,16 @@ const ApproveLoanCell: FC<{
     }
   `);
 
-  const configLoansUpdate = useMemo<GraphQLSubscriptionConfig<ApproveLoanQueriesUpdateSubscription>>(
+  const configLoansUpdate = useMemo<
+    GraphQLSubscriptionConfig<ApproveLoanQueriesUpdateSubscription>
+  >(
     () => ({
       variables: {
         gid: loan_gid,
       },
       subscription: subscriptionApproveLoanUpdate,
     }),
-    [loan_gid],
+    [loan_gid]
   );
 
   useSubscription<ApproveLoanQueriesUpdateSubscription>(configLoansUpdate);
@@ -149,11 +154,13 @@ const ApproveLoanCell: FC<{
   );
 };
 
-const RefetchCell: FC<{ loan: ApproveLoanQueriesRowRefetch_loan$key }> = ({ loan }) => {
-  const [, refetch] = useRefetchableFragment<ApproveLoanQueriesRefetchQuery, ApproveLoanQueriesRowRefetch_loan$key>(
-    approveLoanQueriesRowRefetchableFragment,
-    loan,
-  );
+const RefetchCell: FC<{ loan: ApproveLoanQueriesRowRefetch_loan$key }> = ({
+  loan,
+}) => {
+  const [, refetch] = useRefetchableFragment<
+    ApproveLoanQueriesRefetchQuery,
+    ApproveLoanQueriesRowRefetch_loan$key
+  >(approveLoanQueriesRowRefetchableFragment, loan);
   return (
     <td
       {...stylex.props(baseLoanRowClipboard.base)}
@@ -168,7 +175,7 @@ const RefetchCell: FC<{ loan: ApproveLoanQueriesRowRefetch_loan$key }> = ({ loan
 
 const columnApproveLoans: {
   id: string;
-  header: (t: (text: string) => string) => JSX.Element;
+  header: (t: (text: string) => string) => ReactElement;
   cell: (info: {
     info: {
       id: string;
@@ -182,7 +189,7 @@ const columnApproveLoans: {
     };
     t: (text: string) => string;
     loan: ApproveLoanQueriesRowRefetch_loan$key;
-  }) => JSX.Element;
+  }) => ReactElement;
 }[] = [
   {
     id: "id",
@@ -224,12 +231,16 @@ const columnApproveLoans: {
   {
     id: "ROI",
     header: (t) => <TableColumnName>{t("Retorno anual")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.ROI}%</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.ROI}%</td>
+    ),
   },
   {
     id: "goal",
     header: (t) => <TableColumnName>{t("Monto")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.goal}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.goal}</td>
+    ),
   },
   {
     id: "term",
@@ -243,7 +254,9 @@ const columnApproveLoans: {
   {
     id: "pending",
     header: (t) => <TableColumnName>{t("Faltan")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseLoanRowCell.base)}>{info.pending}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseLoanRowCell.base)}>{info.pending}</td>
+    ),
   },
   {
     id: "expiry",
@@ -276,16 +289,22 @@ export const ApproveLoansPage: FC<Props> = (props) => {
   const { t } = useTranslation();
   const [reset, setReset] = useState(0);
   const { user } = usePreloadedQuery(approveLoansFragment, props.fintechQuery);
-  const { data, loadNext, refetch } = usePaginationFragment<ApproveLoansQueriesPaginationUser, ApproveLoanQueries_user$key>(
-    ApproveLoansQueriesPaginationFragment,
-    user,
+  const { data, loadNext, refetch } = usePaginationFragment<
+    ApproveLoansQueriesPaginationUser,
+    ApproveLoanQueries_user$key
+  >(ApproveLoansQueriesPaginationFragment, user);
+
+  const connectionApproveLoansID = ConnectionHandler.getConnectionID(
+    user?.id || "",
+    "ApproveLoansQueries_user_approveLoans",
+    {
+      reset,
+    }
   );
 
-  const connectionApproveLoansID = ConnectionHandler.getConnectionID(user?.id || "", "ApproveLoansQueries_user_approveLoans", {
-    reset,
-  });
-
-  const configApproveLoans = useMemo<GraphQLSubscriptionConfig<ApproveLoanQueriesSubscription>>(
+  const configApproveLoans = useMemo<
+    GraphQLSubscriptionConfig<ApproveLoanQueriesSubscription>
+  >(
     () => ({
       variables: {
         connections: [connectionApproveLoansID],
@@ -293,7 +312,7 @@ export const ApproveLoansPage: FC<Props> = (props) => {
       },
       subscription: subscriptionApproveLoans,
     }),
-    [connectionApproveLoansID, reset],
+    [connectionApproveLoansID, reset]
   );
 
   useSubscription<ApproveLoanQueriesSubscription>(configApproveLoans);
@@ -320,7 +339,8 @@ export const ApproveLoansPage: FC<Props> = (props) => {
               if (!node) {
                 return null;
               }
-              const { id, user_id, score, ROI, goal, term, expiry, pending } = edge.node;
+              const { id, user_id, score, ROI, goal, term, expiry, pending } =
+                edge.node;
               return (
                 <tr key={node.id} {...stylex.props(baseLoanRowContainer.base)}>
                   {columnApproveLoans.map((column) => (
@@ -348,7 +368,11 @@ export const ApproveLoansPage: FC<Props> = (props) => {
         </Table>
         <Space styleX={customSpace.h20} />
         <Columns styleX={[baseColumn.base, baseColumn.columnJustifyCenter]}>
-          <CustomButton color="secondary" text={t("Cargar más")} onClick={() => loadNext(5)} />
+          <CustomButton
+            color="secondary"
+            text={t("Cargar más")}
+            onClick={() => loadNext(5)}
+          />
           <Space styleX={customSpace.w20} />
           <CustomButton
             text={t("Reiniciar lista")}
@@ -362,7 +386,7 @@ export const ApproveLoansPage: FC<Props> = (props) => {
                   cursor: "",
                   reset: time,
                 },
-                { fetchPolicy: "network-only" },
+                { fetchPolicy: "network-only" }
               );
             }}
           />

@@ -38,8 +38,9 @@ export const gradientLeft = stylex.create({
     left: "0px",
     width: "20px",
     position: "absolute",
-    zIndex: "1",
-    background: "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+    zIndex: 1,
+    backgroundColor:
+      "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
     pointerEvents: "none",
   },
 });
@@ -51,8 +52,9 @@ export const gradientRight = stylex.create({
     right: "0px",
     width: "20px",
     position: "absolute",
-    zIndex: "1",
-    background: "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+    zIndex: 1,
+    backgroundColor:
+      "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
     pointerEvents: "none",
   },
 });
@@ -63,7 +65,14 @@ export const Table: FC<Props> = ({ children, color }) => {
       <div {...stylex.props(gradientLeft.base)} />
       <div {...stylex.props(gradientRight.base)} />
       <div {...stylex.props(overflowXAuto.base)}>
-        <table {...stylex.props(tableCollapse.base, color === "primary" ? tableCollapse.primary : tableCollapse.default)}>{children}</table>
+        <table
+          {...stylex.props(
+            tableCollapse.base,
+            color === "primary" ? tableCollapse.primary : tableCollapse.default
+          )}
+        >
+          {children}
+        </table>
       </div>
     </div>
   );

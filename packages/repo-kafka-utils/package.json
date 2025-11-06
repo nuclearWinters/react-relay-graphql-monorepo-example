@@ -19,17 +19,17 @@
   "dependencies": {
     "@repo/mongo-utils": "workspace:*",
     "@repo/utils": "workspace:*",
-    "graphql-redis-subscriptions": "^2.6.1",
+    "date-fns": "^4.1.0",
+    "graphql-redis-subscriptions": "^2.7.0",
     "graphql-subscriptions": "^3.0.0",
     "kafkajs": "^2.2.4",
-    "date-fns": "^4.1.0",
-    "mongodb": "^6.10.0"
+    "mongodb": "^6.20.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.9.0",
-    "lint-staged": "^15.2.10",
-    "typescript": "^5.6.3"
+    "@types/node": "^24.10.0",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

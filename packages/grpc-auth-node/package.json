@@ -13,20 +13,20 @@
   "author": "Armando Rueda",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "^1.12.2",
+    "@grpc/grpc-js": "^1.14.0",
     "@repo/grpc-utils": "workspace:*",
+    "@repo/logs-utils": "workspace:*",
     "@repo/utils": "workspace:*",
-    "mongodb": "^6.10.0",
-    "redis": "^4.7.0",
-    "@repo/logs-utils": "workspace:*"
+    "mongodb": "^6.20.0",
+    "redis": "^5.9.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.3.4",
     "@repo/typescript-config": "workspace:*",
-    "@testcontainers/redis": "^10.14.0",
-    "@types/node": "^22.9.0",
-    "lint-staged": "^15.2.10",
-    "typescript": "^5.6.3"
+    "@testcontainers/redis": "^11.8.0",
+    "@types/node": "^24.10.0",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

@@ -17,10 +17,10 @@
   "author": "Armando Rueda",
   "license": "ISC",
   "devDependencies": {
-    "lint-staged": "^15.2.10",
-    "@types/node": "^22.9.0",
-    "typescript": "^5.6.3",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^24.10.0",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

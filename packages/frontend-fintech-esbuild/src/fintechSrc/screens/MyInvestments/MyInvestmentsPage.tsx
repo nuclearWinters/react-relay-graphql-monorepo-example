@@ -1,7 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
-import { type FC, Fragment, useMemo, useState } from "react";
-import { type PreloadedQuery, usePaginationFragment, usePreloadedQuery, useRefetchableFragment, useSubscription } from "react-relay/hooks";
-import { ConnectionHandler, type GraphQLSubscriptionConfig } from "relay-runtime";
+import { type FC, Fragment, ReactElement, useMemo, useState } from "react";
+import {
+  type PreloadedQuery,
+  usePaginationFragment,
+  usePreloadedQuery,
+  useRefetchableFragment,
+  useSubscription,
+} from "react-relay/hooks";
+import {
+  ConnectionHandler,
+  type GraphQLSubscriptionConfig,
+} from "relay-runtime";
 import FaClipboard from "../../../assets/clipboard-solid.svg";
 import FaSyncAlt from "../../../assets/rotate-solid.svg";
 import { Columns, baseColumn } from "../../../components/Colums";
@@ -97,7 +106,12 @@ const baseInvestmentRowStatusBar = stylex.create({
   },
 });
 
-type Status = "DELAY_PAYMENT" | "FINANCING" | "PAID" | "PAST_DUE" | "UP_TO_DATE";
+type Status =
+  | "DELAY_PAYMENT"
+  | "FINANCING"
+  | "PAID"
+  | "PAST_DUE"
+  | "UP_TO_DATE";
 
 const status = (status: Status, t: (name: string) => string) => {
   switch (status) {
@@ -139,7 +153,10 @@ interface Props {
 const RefetchCell: FC<{
   investment: MyInvestmentsQueriesRow_investment$key;
 }> = ({ investment }) => {
-  const [, refetch] = useRefetchableFragment<MyInvestmentRowRefetchQuery, MyInvestmentsQueriesRow_investment$key>(investmentRowRefetchableFragment, investment);
+  const [, refetch] = useRefetchableFragment<
+    MyInvestmentRowRefetchQuery,
+    MyInvestmentsQueriesRow_investment$key
+  >(investmentRowRefetchableFragment, investment);
   return (
     <td
       {...stylex.props(baseInvestmentRowClipboard.base)}
@@ -154,7 +171,7 @@ const RefetchCell: FC<{
 
 const columns: {
   id: string;
-  header: (t: (text: string) => string) => JSX.Element;
+  header: (t: (text: string) => string) => ReactElement;
   cell: (info: {
     info: {
       id: string;
@@ -171,7 +188,7 @@ const columns: {
     };
     t: (text: string) => string;
     investment: MyInvestmentsQueriesRow_investment$key;
-  }) => JSX.Element;
+  }) => ReactElement;
 }[] = [
   {
     id: "id",
@@ -218,36 +235,55 @@ const columns: {
   {
     id: "quantity",
     header: (t) => <TableColumnName>{t("Cantidad")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseInvestmentRowCell.base)}>{info.quantity}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseInvestmentRowCell.base)}>{info.quantity}</td>
+    ),
   },
   {
     id: "status",
     header: (t) => <TableColumnName>{t("Estatus")}</TableColumnName>,
     cell: ({ info, t }) => (
       <td {...stylex.props(baseInvestmentRowStatus.base)}>
-        <div {...stylex.props(baseInvestmentRowStatusBar.base, statusStyle(info.status))}>{status(info.status as Status, t)}</div>
+        <div
+          {...stylex.props(
+            baseInvestmentRowStatusBar.base,
+            statusStyle(info.status)
+          )}
+        >
+          {status(info.status as Status, t)}
+        </div>
       </td>
     ),
   },
   {
     id: "paid",
     header: (t) => <TableColumnName>{t("Pagado")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseInvestmentRowCell.base)}>{info.paid_already}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseInvestmentRowCell.base)}>{info.paid_already}</td>
+    ),
   },
   {
     id: "owe",
     header: (t) => <TableColumnName>{t("Pagado")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseInvestmentRowCell.base)}>{info.to_be_paid}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseInvestmentRowCell.base)}>{info.to_be_paid}</td>
+    ),
   },
   {
     id: "interests",
     header: (t) => <TableColumnName>{t("Intereses")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseInvestmentRowCell.base)}>{info.interest_to_earn}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseInvestmentRowCell.base)}>
+        {info.interest_to_earn}
+      </td>
+    ),
   },
   {
     id: "moratory",
     header: (t) => <TableColumnName>{t("Interés por mora")}</TableColumnName>,
-    cell: ({ info }) => <td {...stylex.props(baseInvestmentRowCell.base)}>{info.moratory}</td>,
+    cell: ({ info }) => (
+      <td {...stylex.props(baseInvestmentRowCell.base)}>{info.moratory}</td>
+    ),
   },
   {
     id: "created",
@@ -255,7 +291,9 @@ const columns: {
     cell: ({ info }) => {
       const date = new Date(info.created_at);
       const formattedDate = getDateFormat(date);
-      return <td {...stylex.props(baseInvestmentRowCell.base)}>{formattedDate}</td>;
+      return (
+        <td {...stylex.props(baseInvestmentRowCell.base)}>{formattedDate}</td>
+      );
     },
   },
   {
@@ -264,7 +302,9 @@ const columns: {
     cell: ({ info }) => {
       const date = new Date(info.updated_at);
       const formattedDate = getDateFormat(date);
-      return <td {...stylex.props(baseInvestmentRowCell.base)}>{formattedDate}</td>;
+      return (
+        <td {...stylex.props(baseInvestmentRowCell.base)}>{formattedDate}</td>
+      );
     },
   },
   {
@@ -278,22 +318,34 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
   const { t } = useTranslation();
   const [reset, setReset] = useState(0);
   const { user } = usePreloadedQuery(myInvestmentsFragment, props.fintechQuery);
-  const { data, loadNext, refetch } = usePaginationFragment<MyInvestmentsQueriesPaginationUser, MyInvestmentsQueries_user$key>(
-    myInvestmentsPaginationFragment,
-    user,
-  );
+  const { data, loadNext, refetch } = usePaginationFragment<
+    MyInvestmentsQueriesPaginationUser,
+    MyInvestmentsQueries_user$key
+  >(myInvestmentsPaginationFragment, user);
 
-  const [investmentStatus, setInvestmentStatus] = useState<"none" | "on_going" | "over">("none");
+  const [investmentStatus, setInvestmentStatus] = useState<
+    "none" | "on_going" | "over"
+  >("none");
 
   const status: Status[] | null = useMemo(() => {
-    return investmentStatus === "on_going" ? ["DELAY_PAYMENT", "UP_TO_DATE", "FINANCING"] : investmentStatus === "over" ? ["PAID", "PAST_DUE"] : null;
+    return investmentStatus === "on_going"
+      ? ["DELAY_PAYMENT", "UP_TO_DATE", "FINANCING"]
+      : investmentStatus === "over"
+      ? ["PAID", "PAST_DUE"]
+      : null;
   }, [investmentStatus]);
 
-  const connectionInvestmentID = ConnectionHandler.getConnectionID(user?.id || "", "MyInvestmentsQueries_user_investments", {
-    status,
-    reset,
-  });
-  const configInvestments = useMemo<GraphQLSubscriptionConfig<MyInvestmentsQueriesSubscription>>(
+  const connectionInvestmentID = ConnectionHandler.getConnectionID(
+    user?.id || "",
+    "MyInvestmentsQueries_user_investments",
+    {
+      status,
+      reset,
+    }
+  );
+  const configInvestments = useMemo<
+    GraphQLSubscriptionConfig<MyInvestmentsQueriesSubscription>
+  >(
     () => ({
       variables: {
         status,
@@ -302,17 +354,21 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
       },
       subscription: subscriptionInvestments,
     }),
-    [status, connectionInvestmentID, reset],
+    [status, connectionInvestmentID, reset]
   );
-  const configInvestmentsUpdate = useMemo<GraphQLSubscriptionConfig<MyInvestmentsQueriesUpdateSubscription>>(
+  const configInvestmentsUpdate = useMemo<
+    GraphQLSubscriptionConfig<MyInvestmentsQueriesUpdateSubscription>
+  >(
     () => ({
       variables: {},
       subscription: subscriptionInvestmentsUpdate,
     }),
-    [],
+    []
   );
   useSubscription<MyInvestmentsQueriesSubscription>(configInvestments);
-  useSubscription<MyInvestmentsQueriesUpdateSubscription>(configInvestmentsUpdate);
+  useSubscription<MyInvestmentsQueriesUpdateSubscription>(
+    configInvestmentsUpdate
+  );
 
   if (!user) {
     return null;
@@ -325,15 +381,22 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
         <Select
           value={investmentStatus}
           onChange={(e) => {
-            const investmentStatus = e.target.value as "on_going" | "over" | "none";
+            const investmentStatus = e.target.value as
+              | "on_going"
+              | "over"
+              | "none";
             setInvestmentStatus(investmentStatus);
             const status: Status[] | null =
-              investmentStatus === "on_going" ? ["DELAY_PAYMENT", "UP_TO_DATE", "FINANCING"] : investmentStatus === "over" ? ["PAID", "PAST_DUE"] : null;
+              investmentStatus === "on_going"
+                ? ["DELAY_PAYMENT", "UP_TO_DATE", "FINANCING"]
+                : investmentStatus === "over"
+                ? ["PAID", "PAST_DUE"]
+                : null;
             refetch(
               {
                 status,
               },
-              { fetchPolicy: "network-only" },
+              { fetchPolicy: "network-only" }
             );
           }}
           options={[
@@ -365,7 +428,19 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
               if (!node) {
                 return null;
               }
-              const { id, borrower_id, loan_id, quantity, status, paid_already, interest_to_earn, moratory, created_at, updated_at, to_be_paid } = node;
+              const {
+                id,
+                borrower_id,
+                loan_id,
+                quantity,
+                status,
+                paid_already,
+                interest_to_earn,
+                moratory,
+                created_at,
+                updated_at,
+                to_be_paid,
+              } = node;
               return (
                 <tr key={id} {...stylex.props(baseInvestmentRowBox.base)}>
                   {columns.map((column) => (
@@ -396,7 +471,11 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
         </Table>
         <Space styleX={customSpace.h20} />
         <Columns styleX={[baseColumn.base, baseColumn.columnJustifyCenter]}>
-          <CustomButton text={t("Cargar más")} color="secondary" onClick={() => loadNext(5)} />
+          <CustomButton
+            text={t("Cargar más")}
+            color="secondary"
+            onClick={() => loadNext(5)}
+          />
           <Space styleX={customSpace.w20} />
           <CustomButton
             text={t("Reiniciar lista")}
@@ -412,7 +491,7 @@ export const MyInvestmentsPage: FC<Props> = (props) => {
                 },
                 {
                   fetchPolicy: "network-only",
-                },
+                }
               );
             }}
           />

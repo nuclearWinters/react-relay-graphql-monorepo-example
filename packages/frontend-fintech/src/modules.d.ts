@@ -1,9 +1,10 @@
-declare module "*.png" {
-  const value: string;
-  export default value;
-}
+export {};
 
-declare module "*.svg" {
-  const value: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default value;
+declare global {
+  var process: {
+    env: {
+      AUTH_API?: string;
+      FINTECH_API?: string;
+    };
+  };
 }

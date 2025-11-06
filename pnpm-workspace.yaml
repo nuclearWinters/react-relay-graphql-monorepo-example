@@ -1,4 +1,3 @@
-dedupe-peer-dependents: true
 packages:
   - "packages/*"
   - "!packages/backend-fintech-cassandra"

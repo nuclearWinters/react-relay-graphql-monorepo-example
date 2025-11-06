@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from "react";
+import type { FC, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { type RouteKeys, references } from "../router";
 import { historyPush, historyReplace } from "./utils";
 
@@ -16,7 +16,7 @@ export const Link: FC<{
     references[to].loader();
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleClick = (event: ReactMouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
     if (replace) {
       historyReplace(to);

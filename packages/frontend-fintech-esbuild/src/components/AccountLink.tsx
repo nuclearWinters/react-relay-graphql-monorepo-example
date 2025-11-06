@@ -1,11 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
-import type { FC } from "react";
+import type { FC, ReactElement } from "react";
 import { Link } from "../react-router-elements/Link";
 import type { RouteKeys } from "../router";
 
 interface Props {
   title: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   path: RouteKeys;
   location: string;
 }

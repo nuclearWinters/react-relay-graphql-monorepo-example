@@ -17,14 +17,14 @@
   "author": "Armando Rueda",
   "license": "ISC",
   "dependencies": {
-    "@repo/utils": "workspace:*",
-    "@aws-sdk/client-cloudwatch-logs": "^3.687.0"
+    "@aws-sdk/client-cloudwatch-logs": "^3.925.0",
+    "@repo/utils": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "lint-staged": "^15.2.10",
     "@repo/typescript-config": "workspace:*",
-    "typescript": "^5.6.3"
+    "@types/node": "^24.10.0",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

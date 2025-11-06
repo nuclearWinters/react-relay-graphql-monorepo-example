@@ -14,25 +14,25 @@
   "license": "ISC",
   "dependencies": {
     "@repo/kafka-utils": "workspace:*",
-    "@repo/mongo-utils": "workspace:*",
     "@repo/logs-utils": "workspace:*",
+    "@repo/mongo-utils": "workspace:*",
     "@repo/utils": "workspace:*",
     "date-fns": "^4.1.0",
-    "graphql-redis-subscriptions": "^2.6.1",
+    "graphql-redis-subscriptions": "^2.7.0",
     "graphql-relay": "^0.10.2",
     "graphql-subscriptions": "^3.0.0",
-    "ioredis": "^5.4.1",
+    "ioredis": "^5.8.2",
     "kafkajs": "^2.2.4",
-    "mongodb": "^6.10.0"
+    "mongodb": "^6.20.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.3.4",
     "@repo/typescript-config": "workspace:*",
-    "@testcontainers/kafka": "^10.14.0",
-    "@testcontainers/redis": "^10.14.0",
-    "lint-staged": "^15.2.10",
-    "testcontainers": "^10.14.0",
-    "typescript": "^5.6.3"
+    "@testcontainers/kafka": "^11.8.0",
+    "@testcontainers/redis": "^11.8.0",
+    "lint-staged": "^16.2.6",
+    "testcontainers": "^11.8.0",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

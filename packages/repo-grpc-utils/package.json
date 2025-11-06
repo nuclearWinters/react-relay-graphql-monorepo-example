@@ -40,21 +40,21 @@
   "author": "Armando Rueda",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "^1.12.2",
+    "@grpc/grpc-js": "^1.14.0",
     "@repo/jwt-utils": "workspace:*",
     "@repo/mongo-utils": "workspace:*",
     "@repo/redis-utils": "workspace:*",
     "@repo/utils": "workspace:*",
-    "google-protobuf": "^3.15.8",
-    "mongodb": "^6.10.0"
+    "google-protobuf": "^4.0.0",
+    "mongodb": "^6.20.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^24.10.0",
+    "grpc-tools": "^1.13.0",
     "grpc_tools_node_protoc_ts": "^5.3.3",
-    "@types/node": "^22.9.0",
-    "grpc-tools": "^1.12.4",
-    "lint-staged": "^15.2.10",
-    "typescript": "^5.6.3"
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

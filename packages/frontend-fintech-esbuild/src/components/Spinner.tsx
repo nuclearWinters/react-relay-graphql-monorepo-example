@@ -23,7 +23,7 @@ export const baseSpinnerSpin = stylex.create({
     left: "50%",
     top: "50%",
     transform: "translateX(-50%) translateY(-50%)",
-    zIndex: "1",
+    zIndex: 1,
     color: "forestgreen",
     height: "18px",
     animationName: rotate,

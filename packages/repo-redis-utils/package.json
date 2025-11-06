@@ -17,13 +17,13 @@
   "author": "Armando Rueda",
   "license": "ISC",
   "dependencies": {
-    "redis": "^4.7.0"
+    "redis": "^5.9.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.9.0",
-    "lint-staged": "^15.2.10",
-    "typescript": "^5.6.3"
+    "@types/node": "^24.10.0",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "**/!(*_pb).{js,ts}": [

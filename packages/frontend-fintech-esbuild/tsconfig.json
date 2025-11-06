@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["ES2017", "DOM"],
+    "lib": ["ES2024", "DOM"],
     "outDir": "./build",
     "noImplicitAny": true,
     "module": "esnext",
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
@@ -16,10 +16,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "strictNullChecks": true,
-    "alwaysStrict": true,
+    "alwaysStrict": true
   },
-  "include": [
-    "src",
-    "src/modules.d.ts"
-  ]
+  "include": ["src", "types"]
 }

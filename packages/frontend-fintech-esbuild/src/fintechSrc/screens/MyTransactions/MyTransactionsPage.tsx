@@ -1,7 +1,15 @@
 import * as stylex from "@stylexjs/stylex";
 import { type FC, Suspense, useMemo, useState } from "react";
-import { type PreloadedQuery, usePaginationFragment, usePreloadedQuery, useSubscription } from "react-relay/hooks";
-import { ConnectionHandler, type GraphQLSubscriptionConfig } from "relay-runtime";
+import {
+  type PreloadedQuery,
+  usePaginationFragment,
+  usePreloadedQuery,
+  useSubscription,
+} from "react-relay/hooks";
+import {
+  ConnectionHandler,
+  type GraphQLSubscriptionConfig,
+} from "relay-runtime";
 import { baseApp } from "../../../App";
 import RelayMatchContainer from "../../../RelayMatchContainer";
 import { Columns, baseColumn } from "../../../components/Colums";
@@ -13,7 +21,11 @@ import { Spinner } from "../../../components/Spinner";
 import { Title } from "../../../components/Title";
 import { WrapperSmall } from "../../../components/WrapperSmall";
 import { useTranslation } from "../../../utils";
-import { subscriptionTransactions, transactionsFragment, transactionsPaginationFragment } from "./MyTransactionsQueries";
+import {
+  subscriptionTransactions,
+  transactionsFragment,
+  transactionsPaginationFragment,
+} from "./MyTransactionsQueries";
 import type { MyTransactionsQueriesPaginationUser } from "./__generated__/MyTransactionsQueriesPaginationUser.graphql";
 import type { MyTransactionsQueriesQuery } from "./__generated__/MyTransactionsQueriesQuery.graphql";
 import type { MyTransactionsQueriesSubscription } from "./__generated__/MyTransactionsQueriesSubscription.graphql";
@@ -25,23 +37,29 @@ interface Props {
 
 export const MyTransactionsPage: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const [reset, setReset] = useState(Date.now());
+  const [reset, setReset] = useState(() => Date.now());
   const { user } = usePreloadedQuery(transactionsFragment, props.fintechQuery);
-  const { data, loadNext, refetch } = usePaginationFragment<MyTransactionsQueriesPaginationUser, MyTransactionsQueries_user$key>(
-    transactionsPaginationFragment,
-    user,
+  const { data, loadNext, refetch } = usePaginationFragment<
+    MyTransactionsQueriesPaginationUser,
+    MyTransactionsQueries_user$key
+  >(transactionsPaginationFragment, user);
+
+  const connectionTransactionID = ConnectionHandler.getConnectionID(
+    user?.id || "",
+    "MyTransactionsQueries_user_transactions",
+    {
+      reset,
+    }
   );
 
-  const connectionTransactionID = ConnectionHandler.getConnectionID(user?.id || "", "MyTransactionsQueries_user_transactions", {
-    reset,
-  });
-
-  const configTransactions = useMemo<GraphQLSubscriptionConfig<MyTransactionsQueriesSubscription>>(
+  const configTransactions = useMemo<
+    GraphQLSubscriptionConfig<MyTransactionsQueriesSubscription>
+  >(
     () => ({
       variables: { connections: [connectionTransactionID], reset },
       subscription: subscriptionTransactions,
     }),
-    [connectionTransactionID, reset],
+    [connectionTransactionID, reset]
   );
   useSubscription<MyTransactionsQueriesSubscription>(configTransactions);
 
@@ -63,7 +81,9 @@ export const MyTransactionsPage: FC<Props> = (props) => {
           >
             {data?.transactions?.edges?.map((edge) => {
               if (edge?.node) {
-                return <RelayMatchContainer key={edge.node.__id} match={edge.node} />;
+                return (
+                  <RelayMatchContainer key={edge.node.__id} match={edge.node} />
+                );
               }
               return null;
             })}
@@ -71,7 +91,11 @@ export const MyTransactionsPage: FC<Props> = (props) => {
         </Rows>
         <Space styleX={customSpace.h20} />
         <Columns styleX={[baseColumn.base, baseColumn.columnJustifyCenter]}>
-          <CustomButton text={t("Cargar más")} color="secondary" onClick={() => loadNext(5)} />
+          <CustomButton
+            text={t("Cargar más")}
+            color="secondary"
+            onClick={() => loadNext(5)}
+          />
           <Space styleX={customSpace.w20} />
           <CustomButton
             text={t("Reiniciar lista")}
@@ -87,7 +111,7 @@ export const MyTransactionsPage: FC<Props> = (props) => {
                 },
                 {
                   fetchPolicy: "network-only",
-                },
+                }
               );
             }}
           />

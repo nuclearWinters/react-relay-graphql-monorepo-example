@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { type Dispatch, type FC, Fragment, useMemo, useState } from "react";
+import { type Dispatch, type FC, Fragment, ReactElement, SetStateAction, useMemo, useState } from "react";
 import { type PreloadedQuery, usePaginationFragment, usePreloadedQuery, useRefetchableFragment, useSubscription } from "react-relay/hooks";
 import { ConnectionHandler, type GraphQLSubscriptionConfig } from "relay-runtime";
 import FaClipboard from "../../../assets/clipboard-solid.svg";
@@ -189,7 +189,7 @@ const Cell: FC<{ id: string }> = ({ id }) => {
     <td {...stylex.props(baseLoanRowClipboard.base)}>
       <FaClipboard
         onClick={() => {
-          navigator.clipboard.writeText(id);
+          window.navigator.clipboard.writeText(id);
         }}
         {...stylex.props(baseLoanRowIcon.base)}
       />
@@ -213,7 +213,7 @@ const RefetchCell: FC<{ loan: MyLoansQueriesRowRefetch_loan$key }> = ({ loan }) 
 
 const columnMyLoans: {
   id: string;
-  header: (t: (text: string) => string) => JSX.Element;
+  header: (t: (text: string) => string) => ReactElement;
   cell: (info: {
     info: {
       id: string;
@@ -227,9 +227,9 @@ const columnMyLoans: {
       status: StatusLoan;
     };
     t: (text: string) => string;
-    setShowSubTable: Dispatch<React.SetStateAction<string>>;
+    setShowSubTable: Dispatch<SetStateAction<string>>;
     loan: MyLoansQueriesRowRefetch_loan$key;
-  }) => JSX.Element;
+  }) => ReactElement;
 }[] = [
   {
     id: "space",

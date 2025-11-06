@@ -19,9 +19,15 @@ export interface Queries {
   authQuery: utilsAuthQuery;
 }
 
-export const RetireFunds: EntryPointComponent<Queries, Record<string, undefined>> = (props) => {
+export const RetireFunds: EntryPointComponent<
+  Queries,
+  Record<string, undefined>
+> = (props) => {
   const { t } = useTranslation();
-  const { authUser } = usePreloadedQuery(authUserQuery, props.queries.authQuery);
+  const { authUser } = usePreloadedQuery(
+    authUserQuery,
+    props.queries.authQuery
+  );
   const [quantity, setQuantity] = useState("");
   const handleQuantityOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -46,7 +52,14 @@ export const RetireFunds: EntryPointComponent<Queries, Record<string, undefined>
   const { isLender, isSupport, isBorrower } = authUser;
 
   if (isSupport) {
-    return <RedirectContainer allowed={["lender", "borrower"]} isBorrower={isBorrower} isLender={isLender} isSupport={isSupport} />;
+    return (
+      <RedirectContainer
+        allowed={["lender", "borrower"]}
+        isBorrower={isBorrower}
+        isLender={isLender}
+        isSupport={isSupport}
+      />
+    );
   }
 
   return (
@@ -55,7 +68,13 @@ export const RetireFunds: EntryPointComponent<Queries, Record<string, undefined>
         <Title text={t("Retirar fondos")} />
         <FormSmall>
           <Label label={t("Cantidad")} />
-          <Input placeholder={t("Cantidad")} value={quantity} name="quantity" onChange={handleQuantityOnChange} onBlur={handleQuantityOnBlur} />
+          <Input
+            placeholder={t("Cantidad")}
+            value={quantity}
+            name="quantity"
+            onChange={handleQuantityOnChange}
+            onBlur={handleQuantityOnBlur}
+          />
           <Space styleX={customSpace.h30} />
           <RetireFundsButton quantity={quantity} />
           <Space styleX={customSpace.h30} />
